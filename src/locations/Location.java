@@ -9,4 +9,8 @@ public abstract class Location {
 	public Location(String n) {
 		name = n;
 	}
+	
+	public String getName() {
+		return name;
+	}
 }
