@@ -47,7 +47,6 @@ public class Mall extends Location {
 				tempList.add(connection);
 			}
 		}
-		// TODO
 		return tempList;
 	}
 }

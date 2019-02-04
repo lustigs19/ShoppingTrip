@@ -12,9 +12,14 @@ public class Menu {
 	public Menu(String title, String... args) {
 		menuTitle = title;
 		
+		items = new ArrayList<String>();
 		for (String arg : args) {
 			items.add(arg);
 		}
+	}
+	
+	public void setTitle(String title) {
+		menuTitle = title;
 	}
 	
 	public void addItem(String arg) {
@@ -44,5 +49,10 @@ public class Menu {
 		} while (!valid);
 		
 		return choice;
+	}
+	
+	/** empties the menu */
+	public void reset() {
+		items = new ArrayList<String>();
 	}
 }

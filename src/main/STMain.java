@@ -4,7 +4,7 @@ import locations.Mall;
 
 public class STMain {
 	
-	public void main() {
+	public static void main(String[] args) {
 		Mall mall = Mall.NATICK_MALL;
 		Shopper shopper = new Shopper("Stuart", 6000);
 		
