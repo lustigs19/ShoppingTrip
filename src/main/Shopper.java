@@ -17,6 +17,10 @@ public class Shopper {
 	ArrayList<Purchase> purchaseHistory;
 	ArrayList<Item> inventory;
 	
+	public static final int HISTORY_COLUMN1_WIDTH = 30;
+	public static final int HISTORY_COLUMN2_WIDTH = 6;
+	public static final String HISTORY_TITLE = "***PURCHASE HISTORY***";
+	
 	static final HashSet<Character> VOWELS = new HashSet<Character>(Arrays.asList('a', 'e', 'i', 'o', 'u'));
 	Area currentArea;
 	boolean finished;
@@ -43,7 +47,8 @@ public class Shopper {
 			while (!finished) {
 				visit(currentArea);
 			}
-			System.out.println("Final balance: " + balance);
+			System.out.printf("Final balance: $%.2f", balance);
+			
 		} else if (l instanceof Area) {
 			Menu menu = new Menu("You are in the area '" + currentArea.getName() + "'.\n" +
 						"Where would you like to visit?", "Stores", "Services", "Other areas", "Purchase history", "Current balance");
@@ -62,15 +67,7 @@ public class Shopper {
 				menu = new LocationMenu("Choose an area:", mall.getConnectedAreas(currentArea));
 				break;
 			case 4:
-				if (purchaseHistory.size() > 0) {
-					System.out.println("***PURCHASE HISTORY:***");
-					for (Purchase p : purchaseHistory) {
-						System.out.printf("%s: %.2f\n", p.getItem().getName(), p.getCost());
-					}
-					System.out.println();
-				} else {
-					System.out.println("You have yet to purchase anything.");
-				}
+				printPurchaseHistory();
 				break;
 			case 5:
 				System.out.printf("Current balance: $%.2f\n", balance);
@@ -122,6 +119,33 @@ public class Shopper {
 			}
 		} else if (l instanceof Service) {
 			// TODO
+		}
+	}
+	
+	public void printPurchase(Purchase p) {
+		StringBuilder sb = new StringBuilder();
+		if (p.getItem().getName().length() <= HISTORY_COLUMN1_WIDTH) {
+			sb.append(p.getItem().getName());
+			for (int i = p.getItem().getName().length(); i < HISTORY_COLUMN1_WIDTH; i++) sb.append(" ");
+		} else {
+			sb.append(p.getItem().getName().substring(0, HISTORY_COLUMN1_WIDTH));
+		}
+		sb.append(String.format("$%.2f", p.getCost()));
+		System.out.println(sb.toString());
+	}
+	
+	public void printPurchaseHistory() {
+		if (purchaseHistory.size() > 0) {
+			StringBuilder sb = new StringBuilder();
+			
+			for (int i = 0; i < Math.ceil((HISTORY_COLUMN1_WIDTH + HISTORY_COLUMN2_WIDTH - HISTORY_TITLE.length()) / 2); i++) sb.append(" ");
+			System.out.println(sb.toString() + HISTORY_TITLE + sb.toString()); // 9 ' 's on either side
+			for (Purchase p : purchaseHistory) {
+				printPurchase(p);
+			}
+			System.out.println();
+		} else {
+			System.out.println("You have yet to purchase anything.");
 		}
 	}
 }
