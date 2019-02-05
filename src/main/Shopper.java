@@ -139,7 +139,15 @@ public class Shopper {
 			StringBuilder sb = new StringBuilder();
 			
 			for (int i = 0; i < Math.ceil((HISTORY_COLUMN1_WIDTH + HISTORY_COLUMN2_WIDTH - HISTORY_TITLE.length()) / 2); i++) sb.append(" ");
-			System.out.println(sb.toString() + HISTORY_TITLE + sb.toString()); // 9 ' 's on either side
+			System.out.println(sb.toString() + HISTORY_TITLE + sb.toString()); // a bunch of ' 's on either side
+			sb.delete(0, sb.length());
+			sb.append("Item:");
+			for (int i = 0; i < HISTORY_COLUMN1_WIDTH - "Item:".length(); i++) {
+				sb.append(" ");
+			}
+			sb.append("Cost:");
+			System.out.println(sb.toString());
+			
 			for (Purchase p : purchaseHistory) {
 				printPurchase(p);
 			}
