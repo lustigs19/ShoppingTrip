@@ -5,10 +5,12 @@ import java.util.ArrayList;
 public class Area extends Location {
 	
 	ArrayList<Hotspot> hotspots;
+	boolean entrance;
 
-	public Area(String n) {
+	public Area(String n, boolean isEntrance) {
 		super(n);
 		hotspots = new ArrayList<Hotspot>();
+		entrance = isEntrance;
 	}
 	
 	public void addHotspot(Hotspot h) {
@@ -36,5 +38,9 @@ public class Area extends Location {
 		}
 		
 		return tempList;
+	}
+	
+	public boolean isEntrance() {
+		return entrance;
 	}
 }

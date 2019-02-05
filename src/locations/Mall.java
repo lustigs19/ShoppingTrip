@@ -12,9 +12,9 @@ public class Mall extends Location {
 	ArrayList<Connection> connections;
 	
 	public static final Mall DEFAULT_MALL = new Mall("Marj Ma-Mall") {{
-		Area entrance = new Area("Entrance"),
-				hallway = new Area("Hallway"),
-				foodCourt = new Area("Food Court");
+		Area entrance = new Area("Entrance", true),
+				hallway = new Area("Hallway", false),
+				foodCourt = new Area("Food Court", false);
 		
 		entrance.addHotspot(new Store("MEMES", new HashMap<Item, Float>() {
 			private static final long serialVersionUID = 1L;
@@ -65,6 +65,7 @@ public class Mall extends Location {
 		}
 	}
 	
+	/** returns the starting area for the shopping trip to the mall. */
 	public Area getDefaultArea() {
 		return areas.get(0);
 	}

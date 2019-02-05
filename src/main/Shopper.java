@@ -7,7 +7,6 @@ import java.util.HashSet;
 import locations.Area;
 import locations.Location;
 import locations.Mall;
-import locations.Service;
 import locations.Store;
 
 public class Shopper {
@@ -50,13 +49,13 @@ public class Shopper {
 			System.out.printf("Final balance: $%.2f\n", balance);
 			
 		} else if (l instanceof Area) {
-			Menu menu = new Menu("You are in the area '" + currentArea.getName() + "'.\n" + "What would you like to do?",
+			Menu menu = new Menu("You are in the area '" + currentArea.getName() + "'.\n"
+						+ "What would you like to do?", // title
 						"Visit stores",				// 1
-						"Visit services",			// 2
-						"Visit other areas",		// 3
-						"Check purchase history",	// 4
-						"Check current balance");	// 5
-			if (currentArea == mall.getDefaultArea()) menu.addItem("Exit mall");
+						"Visit other areas",		// 2
+						"Check purchase history",	// 3
+						"Check current balance");	// 4
+			if (currentArea.isEntrance()) menu.addItem("Exit mall"); // 5
 			switch(menu.displayAndChoose()) {
 			
 			default:
@@ -65,23 +64,20 @@ public class Shopper {
 				menu = new LocationMenu("Choose a store:", currentArea.getHotspots(Store.class));
 				break;
 			case 2:
-				menu = new LocationMenu("Choose a service:", currentArea.getHotspots(Service.class));
-				break;
-			case 3:
 				menu = new LocationMenu("Choose an area:", mall.getConnectedAreas(currentArea));
 				break;
-			case 4:
+			case 3:
 				printPurchaseHistory();
 				break;
-			case 5:
+			case 4:
 				printCurrentBalance();
 				break;
-			case 6:
+			case 5:
 				finished = true;
 				break;
 			}
 			
-			// if you have chosen options 1, 2, or 3
+			// if you have chosen options 1 or 2
 			if (menu instanceof LocationMenu) {
 				loc = ((LocationMenu) menu).getLocation(menu.displayAndChoose());
 				if (loc != null) {
@@ -121,8 +117,6 @@ public class Shopper {
 				// revisit the store. Only return to area if 'return' is chosen from the menu.
 				visit(l);
 			}
-		} else if (l instanceof Service) {
-			// TODO
 		}
 	}
 	
