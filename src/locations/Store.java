@@ -1,27 +1,24 @@
 package locations;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 
 import main.Item;
 
 public class Store extends Hotspot {
 	
-	ArrayList<Item> items;
+	HashMap<Item, Float> itemMap;
 	
-	public Store(String n, Item... itemArray) {
+	public Store(String n, HashMap<Item, Float> items) {
 		super(n);
-		
-		items = new ArrayList<Item>();
-		items.addAll(Arrays.asList(itemArray));
+		itemMap = items;
 	}
 	
-	public void addItem(Item item) {
-		items.add(item);
+	public void addItem(Item item, Float cost) {
+		itemMap.put(item, cost);
 	}
 	
-	public ArrayList<Item> getItemList() {
-		return items;
+	public HashMap<Item, Float> getItemMap() {
+		return itemMap;
 	}
 
 }

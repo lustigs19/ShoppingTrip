@@ -1,26 +1,30 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ItemMenu extends Menu {
 	
-	ArrayList<Item> itemList;
+	ArrayList<Purchase> purchaseList;
 	
-	public ItemMenu(String title, ArrayList<Item> args) {
+	public ItemMenu(String title, HashMap<Item, Float> itemMap) {
 		super(title);
 		
-		itemList = args;
+		purchaseList = new ArrayList<Purchase>();
+		for (Item i : itemMap.keySet()) {
+			purchaseList.add(new Purchase(i, itemMap.get(i)));
+		}
 		
 		items = new ArrayList<String>();
-		for (Item arg : itemList) {
-			items.add(arg.getName() + ": $" + String.format("%.2f", arg.getPrice()));
+		for (Purchase p : purchaseList) {
+			items.add(p.getItem().getName() + ": $" + String.format("%.2f", p.getCost()));
 		}
 		items.add("return");
 	}
 	
-	public Item getChoice(int choice) {
-		if (choice - 1 == itemList.size()) return null;
-		return itemList.get(choice - 1);
+	public Purchase getChoice(int choice) {
+		if (choice - 1 == purchaseList.size()) return null;
+		return purchaseList.get(choice - 1);
 	}
 
 }
