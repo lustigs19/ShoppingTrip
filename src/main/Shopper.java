@@ -40,7 +40,7 @@ public class Shopper {
 		} else if (l instanceof Area) {
 			Menu menu = new Menu("You are in the area '" + currentArea.getName() + "'.\n" +
 						"Where would you like to visit?", "Stores", "Services", "Other areas");
-			
+			// TODO check balance
 			switch(menu.displayAndChoose()) {
 			
 			default:
