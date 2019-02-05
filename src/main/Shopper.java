@@ -77,7 +77,8 @@ public class Shopper {
 					System.out.printf("You spent $%.2f on a " + itemChoice.getName() + ".\n" +
 								"You have $%.2f remaining.\n", itemChoice.getPrice(), balance);
 				} else {
-					System.out.println("You do not have enough money to buy this. Go to an ATM and receive more money, "
+					System.out.println("You do not have enough money to buy this.\n"
+							+ "Go to an ATM and receive more money, \n"
 							+ "or return to the entrance to finish your trip.");
 				}
 				visit(l);

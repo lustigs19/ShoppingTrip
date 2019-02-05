@@ -10,7 +10,7 @@ public class Mall extends Location {
 	int areaIndex = 0;
 	ArrayList<Connection> connections;
 	
-	public static final Mall NATICK_MALL = new Mall("Natick Mall") {{
+	public static final Mall DEFAULT_MALL = new Mall("Natick Mall") {{
 		Area entrance = new Area("Entrance"),
 				hallway = new Area("Hallway"),
 				foodCourt = new Area("Food Court");
