@@ -38,8 +38,8 @@ public class Menu {
 			for (int i = 0; i < items.size(); i++) {
 				displayMenuItem(i);
 			}
-			System.out.println(": ");
 			String input = sc.next();
+			System.out.println();
 			try {
 				choice = Integer.valueOf(input);
 			} catch (Exception e) {

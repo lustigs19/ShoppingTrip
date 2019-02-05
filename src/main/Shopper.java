@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import locations.Area;
 import locations.Connection;
@@ -14,6 +15,16 @@ public class Shopper {
 	float balance;
 	Mall mall;
 	ArrayList<Item> purchasedItems;
+	
+	static final HashSet<Character> VOWELS = new HashSet<Character>() {
+		private static final long serialVersionUID = 1L;
+	{
+		add('a');
+		add('e');
+		add('i');
+		add('o');
+		add('u');
+	}};
 	
 	Area currentArea;
 	boolean finished;
@@ -73,9 +84,18 @@ public class Shopper {
 			if (itemChoice != null) {
 				if (balance >= itemChoice.getPrice()) {
 					balance -= itemChoice.getPrice();
-					purchasedItems.add(itemChoice);
-					System.out.printf("You spent $%.2f on a " + itemChoice.getName() + ".\n" +
-								"You have $%.2f remaining.\n", itemChoice.getPrice(), balance);
+					System.out.printf("You spent $%.2f on a" +
+							(VOWELS.contains(Character.isAlphabetic(itemChoice.getName().charAt(0)) ? // checking for "an" or "a"
+							Character.toLowerCase(itemChoice.getName().charAt(0)) :
+							Character.toLowerCase(itemChoice.getName().charAt(1))) ? "n" : "") +
+							" " + itemChoice.getName() + ".\n" +
+							"You have $%.2f remaining.\n", itemChoice.getPrice(), balance);
+					
+					if (itemChoice instanceof FoodItem) {
+						System.out.println("\n***" + name + ": " + ((FoodItem) itemChoice).getText() + "***\n");
+					} else {
+						purchasedItems.add(itemChoice);
+					}
 				} else {
 					System.out.println("You do not have enough money to buy this.\n"
 							+ "Go to an ATM and receive more money, \n"
