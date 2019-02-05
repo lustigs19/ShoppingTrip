@@ -4,73 +4,79 @@ import java.util.ArrayList;
 
 import locations.Area;
 import locations.Connection;
-import locations.Hotspot;
 import locations.Location;
 import locations.Mall;
+import locations.Service;
 import locations.Store;
 
 public class Shopper {
 	String name;
 	float balance;
 	Mall mall;
+	ArrayList<Item> purchasedItems;
 	
-	Location currentLocation;
+	Area currentArea;
 	boolean finished;
 	
 	public Shopper(String n, float bal) {
 		name = n;
 		balance = bal;
 		finished = false;
+		
+		purchasedItems = new ArrayList<Item>();
 	}
 	
 	public void visit(Location l) {
-		int choice;
+		Location loc;
 		
 		if (l instanceof Mall) {
 			mall = (Mall) l;
-			currentLocation = mall.getDefaultArea();
-			
+			currentArea = mall.getDefaultArea();
+			System.out.printf("Your balance: $%.2f\n", balance);
 			while (!finished) {
-				visit(currentLocation);
+				visit(currentArea);
 			}
 			System.out.println("Final balance: " + balance);
 		} else if (l instanceof Area) {
-			Menu menu1 = new Menu("You are in the area '" + currentLocation.getName() + "'.\n" +
+			Menu menu = new Menu("You are in the area '" + currentArea.getName() + "'.\n" +
 						"Where would you like to visit?", "Stores", "Services", "Other areas");
-			switch(menu1.displayAndChoose()) {
+			
+			switch(menu.displayAndChoose()) {
+			
 			default:
 			case 1:
-				menu1.reset();
-				menu1.setTitle("Choose a store:");
-				ArrayList<Store> storeList = ((Area) currentLocation).getStores();
-				for (Store store : storeList) {
-					menu1.addItem(store.getName());
-				}
-				menu1.addItem("cancel");
-				choice = menu1.displayAndChoose();
-				if (choice < storeList.size()) {
-					currentLocation = storeList.get(choice - 1);
-				}
+				menu = new LocationMenu("Choose a store:", currentArea.getHotspots(Store.class));
 				break;
 			case 2:
-				
+				menu = new LocationMenu("Choose a service:", currentArea.getHotspots(Service.class));
 				break;
 			case 3:
-				menu1.reset();
-				ArrayList<Area> areaList = new ArrayList<Area>();
-				for (Connection c : mall.getConnections((Area) currentLocation)) {
-					menu1.addItem(c.get((Area) currentLocation).getName());
-					areaList.add(c.get((Area) currentLocation));
-				} // TODO set up a menu for locations!!!
-				menu1.addItem("cancel");
-				choice = menu1.displayAndChoose();
-				if (choice < areaList.size()) {
-					currentLocation = areaList.get(choice - 1);
+				ArrayList<Location> tempList = new ArrayList<Location>();
+				for (Connection c : mall.getConnections(currentArea)) {
+					tempList.add(c.get(currentArea));
 				}
+				menu = new LocationMenu("Choose an area:", tempList);
 				break;
 			}
-		} else if (l instanceof Hotspot) {
+			loc = ((LocationMenu) menu).getLocation(menu.displayAndChoose());
+			if (loc != null) {
+				if (loc instanceof Area) {
+					currentArea = (Area) loc;
+				} else {
+					visit(loc);
+				}
+			}
+		} else if (l instanceof Store) {
+			ItemMenu menu = new ItemMenu("You are in " + l.getName() + ".\nWhat would you like to purchase?", ((Store) l).getItemList());
+			Item itemChoice = menu.getChoice(menu.displayAndChoose());
 			
+			if (itemChoice != null) {
+				balance -= itemChoice.getPrice();
+				purchasedItems.add(itemChoice);
+				System.out.printf("You spent $%.2f on a " + itemChoice.getName() + ".\n" +
+							"You have $%.2f remaining.\n", itemChoice.getPrice(), balance);
+				visit(l);
+			}
 		}
 	}
 }

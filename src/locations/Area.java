@@ -15,11 +15,23 @@ public class Area extends Location {
 		hotspots.add(h);
 	}
 	
-	public ArrayList<Store> getStores() {
-		ArrayList<Store> tempList = new ArrayList<Store>();
+	/** returns all the hotspots */
+	public ArrayList<Location> getHotspots() {
+		ArrayList<Location> tempList = new ArrayList<Location>();
 		for (Hotspot h : hotspots) {
-			if (h instanceof Store) {
-				tempList.add((Store) h);
+			tempList.add(h);
+		}
+		
+		return tempList;
+	}
+	
+	/** returns all hotspots of class c */
+	public ArrayList<Location> getHotspots(Class<?> c) {
+		ArrayList<Location> tempList = new ArrayList<Location>();
+		
+		for (Hotspot h : hotspots) {
+			if (c.isInstance(h)) {
+				tempList.add(h);
 			}
 		}
 		

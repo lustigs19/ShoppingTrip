@@ -2,6 +2,8 @@ package locations;
 
 import java.util.ArrayList;
 
+import main.Item;
+
 public class Mall extends Location {
 	
 	ArrayList<Area> areas;
@@ -12,6 +14,9 @@ public class Mall extends Location {
 		Area entrance = new Area("Entrance"),
 				hallway = new Area("Hallway"),
 				foodCourt = new Area("Food Court");
+		
+		entrance.addHotspot(new Store("MEMES", new Item("1 meme", 10)));
+		
 		
 		// the first area added is the starting area
 		addArea(entrance, hallway);

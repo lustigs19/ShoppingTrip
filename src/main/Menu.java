@@ -55,4 +55,8 @@ public class Menu {
 	public void reset() {
 		items = new ArrayList<String>();
 	}
+	
+	public int getMenuSize() {
+		return items.size();
+	}
 }
