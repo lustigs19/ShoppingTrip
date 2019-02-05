@@ -18,8 +18,8 @@ public class Shopper {
 	ArrayList<Item> inventory;
 	
 	public static final int HISTORY_COLUMN1_WIDTH = 30;
-	public static final int HISTORY_COLUMN2_WIDTH = 6;
-	public static final String HISTORY_TITLE = "***PURCHASE HISTORY***";
+	public static final int HISTORY_COLUMN2_WIDTH = 8;
+	public static final String HISTORY_TITLE = "*** PURCHASE HISTORY ***";
 	
 	static final HashSet<Character> VOWELS = new HashSet<Character>(Arrays.asList('a', 'e', 'i', 'o', 'u'));
 	Area currentArea;
@@ -41,17 +41,21 @@ public class Shopper {
 			mall = (Mall) l;
 			System.out.println("You are entering the " + l.getName());
 			currentArea = mall.getDefaultArea();
-			System.out.printf("Your balance: $%.2f\n", balance);
+			printCurrentBalance();
 			
 			// loop of areas. Stores are visited inside the loop of a specific area (not their own visit)
 			while (!finished) {
 				visit(currentArea);
 			}
-			System.out.printf("Final balance: $%.2f", balance);
+			System.out.printf("Final balance: $%.2f\n", balance);
 			
 		} else if (l instanceof Area) {
-			Menu menu = new Menu("You are in the area '" + currentArea.getName() + "'.\n" +
-						"Where would you like to visit?", "Stores", "Services", "Other areas", "Purchase history", "Current balance");
+			Menu menu = new Menu("You are in the area '" + currentArea.getName() + "'.\n" + "What would you like to do?",
+						"Visit stores",				// 1
+						"Visit services",			// 2
+						"Visit other areas",		// 3
+						"Check purchase history",	// 4
+						"Check current balance");	// 5
 			if (currentArea == mall.getDefaultArea()) menu.addItem("Exit mall");
 			switch(menu.displayAndChoose()) {
 			
@@ -70,7 +74,7 @@ public class Shopper {
 				printPurchaseHistory();
 				break;
 			case 5:
-				System.out.printf("Current balance: $%.2f\n", balance);
+				printCurrentBalance();
 				break;
 			case 6:
 				finished = true;
@@ -137,23 +141,33 @@ public class Shopper {
 	public void printPurchaseHistory() {
 		if (purchaseHistory.size() > 0) {
 			StringBuilder sb = new StringBuilder();
+			StringBuilder line = new StringBuilder();
+			for (int i = 0; i < HISTORY_COLUMN1_WIDTH + HISTORY_COLUMN2_WIDTH; i++) {
+				line.append("-");
+			}
+			line.append("\n");
 			
+			System.out.print(line);
 			for (int i = 0; i < Math.ceil((HISTORY_COLUMN1_WIDTH + HISTORY_COLUMN2_WIDTH - HISTORY_TITLE.length()) / 2); i++) sb.append(" ");
 			System.out.println(sb.toString() + HISTORY_TITLE + sb.toString()); // a bunch of ' 's on either side
-			sb.delete(0, sb.length());
+			sb.delete(0, sb.length()); // clears sb
 			sb.append("Item:");
 			for (int i = 0; i < HISTORY_COLUMN1_WIDTH - "Item:".length(); i++) {
 				sb.append(" ");
 			}
 			sb.append("Cost:");
-			System.out.println(sb.toString());
+			System.out.print(line.toString() + sb.toString() + "\n" + line.toString());
 			
 			for (Purchase p : purchaseHistory) {
 				printPurchase(p);
 			}
-			System.out.println();
+			System.out.println(line);
 		} else {
 			System.out.println("You have yet to purchase anything.");
 		}
+	}
+	
+	public void printCurrentBalance() {
+		System.out.printf("Current balance: $%.2f\n", balance);
 	}
 }
