@@ -23,6 +23,8 @@ public class Mall extends Location {
 				put(new Item("'a bunch of gamers'"), 17.49f);
 		}}));
 		
+		entrance.addHotspot(new Map());
+		
 		hallway.addHotspot(new Store("The Lego Store", new HashMap<Item, Float>() {
 			private static final long serialVersionUID = 1L;
 		{
@@ -78,5 +80,9 @@ public class Mall extends Location {
 			}
 		}
 		return tempList;
+	}
+	
+	public ArrayList<Area> getAreas() {
+		return areas;
 	}
 }

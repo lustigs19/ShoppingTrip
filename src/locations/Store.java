@@ -20,5 +20,4 @@ public class Store extends Hotspot {
 	public HashMap<Item, Float> getItemMap() {
 		return itemMap;
 	}
-
 }

@@ -7,6 +7,7 @@ import java.util.HashSet;
 import locations.Area;
 import locations.Location;
 import locations.Mall;
+import locations.Map;
 import locations.Store;
 
 public class Shopper {
@@ -28,6 +29,7 @@ public class Shopper {
 		name = n;
 		balance = bal;
 		finished = false;
+		currentArea = null;
 		
 		purchaseHistory = new ArrayList<Purchase>();
 		inventory = new ArrayList<Item>();
@@ -48,20 +50,20 @@ public class Shopper {
 			}
 			System.out.printf("Final balance: $%.2f\n", balance);
 			
-		} else if (l instanceof Area) {
+		} else if (l instanceof Area && currentArea != null) {
 			Menu menu = new Menu("You are in the area '" + currentArea.getName() + "'.\n"
 						+ "What would you like to do?", // title
-						"Visit stores",				// 1
-						"Visit other areas",		// 2
-						"Check purchase history",	// 3
-						"Check current balance");	// 4
-			if (currentArea.isEntrance()) menu.addItem("Exit mall"); // 5
+						"Visit hotspots (ex: stores)",					// 1
+						"Visit other areas",							// 2
+						"Check purchase history",						// 3
+						"Check current balance");						// 4
+			if (currentArea.isEntrance()) menu.addItem("Exit mall"); 	// 5
 			switch(menu.displayAndChoose()) {
 			
 			default:
 				break;
 			case 1:
-				menu = new LocationMenu("Choose a store:", currentArea.getHotspots(Store.class));
+				menu = new LocationMenu("Choose a store:", currentArea.getHotspots());
 				break;
 			case 2:
 				menu = new LocationMenu("Choose an area:", mall.getConnectedAreas(currentArea));
@@ -78,7 +80,7 @@ public class Shopper {
 			}
 			
 			// if you have chosen options 1 or 2
-			if (menu instanceof LocationMenu) {
+			if (menu instanceof LocationMenu && currentArea != null) {
 				loc = ((LocationMenu) menu).getLocation(menu.displayAndChoose());
 				if (loc != null) {
 					if (loc instanceof Area) {
@@ -117,6 +119,11 @@ public class Shopper {
 				// revisit the store. Only return to area if 'return' is chosen from the menu.
 				visit(l);
 			}
+		} else if (l instanceof Map) {
+			for (Location location : ((Map) l).getShortestRoute(mall, currentArea, mall.getAreas().get(1).getHotspots().get(0))) {
+				System.out.println(location.getName());
+			}
+			System.out.println();
 		}
 	}
 	
