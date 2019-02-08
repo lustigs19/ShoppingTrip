@@ -109,7 +109,7 @@ public class Shopper {
 						Character.toLowerCase(i.getName().charAt(1))) ? "n" : "") +
 						" " + i.getName() + ".\n" +
 						"You have $%.2f remaining.\n", itemChoice.getCost(), balance);
-				
+						// TODO 8888888888888888 an 8 an 8
 				if (i instanceof FoodItem) {
 					System.out.println("\n***" + name + ": " + ((FoodItem) i).getText() + "***\n");
 				} else {
