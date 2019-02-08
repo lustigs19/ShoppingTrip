@@ -3,21 +3,25 @@ package locations;
 import java.util.ArrayList;
 
 public class Map extends Hotspot {
+	
+	ArrayList<Location> paths;
 
 	public Map() {
 		super("Map");
+		paths = new ArrayList<Location>();
 	}
-
+	
 	public ArrayList<Location> getShortestRoute(Mall m, Area a, Location b) {
+		// TODO and maps should be able to have their own names :(
 		return findLocation(m, a, b, new ArrayList<Location>());
 	}
 	
+	/** returns 1 possible path to a certain location from a certain area.*/
 	public ArrayList<Location> findLocation(Mall m, Area currentLoc, Location destination, ArrayList<Location> visitedLocations) {
 		
 		visitedLocations.add(currentLoc);
 		
 		if (currentLoc.equals(destination)) {
-			visitedLocations.add(destination);
 			return visitedLocations;
 		}
 		

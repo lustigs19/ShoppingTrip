@@ -3,6 +3,7 @@ package main;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Scanner;
 
 import locations.Area;
 import locations.Location;
@@ -16,6 +17,7 @@ public class Shopper {
 	Mall mall;
 	ArrayList<Purchase> purchaseHistory;
 	ArrayList<Item> inventory;
+	Scanner scanner = new Scanner(System.in);
 	
 	public static final int HISTORY_COLUMN1_WIDTH = 30;
 	public static final int HISTORY_COLUMN2_WIDTH = 8;
@@ -63,7 +65,7 @@ public class Shopper {
 			default:
 				break;
 			case 1:
-				menu = new LocationMenu("Choose a store:", currentArea.getHotspots());
+				menu = new LocationMenu("Choose a hotspot:", currentArea.getHotspots());
 				break;
 			case 2:
 				menu = new LocationMenu("Choose an area:", mall.getConnectedAreas(currentArea));
@@ -120,10 +122,24 @@ public class Shopper {
 				visit(l);
 			}
 		} else if (l instanceof Map) {
-			for (Location location : ((Map) l).getShortestRoute(mall, currentArea, mall.getAreas().get(1).getHotspots().get(0))) {
-				System.out.println(location.getName());
-			}
+			System.out.println("MAP: 'Welcome to the " + mall.getName() + " map service.'\nInput location name:");
+			String input = scanner.nextLine();
 			System.out.println();
+			if (mall.getLocation(input) != null) {
+				
+				if (mall.getLocation(input).equals(mall) || mall.getLocation(input).equals(currentArea) || mall.getLocation(input) instanceof Map) {
+					System.out.println("You are currently in this location.");
+				}
+				
+				System.out.println("Directions:");
+				ArrayList<Location> directions = ((Map) l).getShortestRoute(mall, currentArea, mall.getLocation(input));
+				for (int i = 0; i < directions.size(); i++) {
+					System.out.print(directions.get(i).getName() + (i == directions.size() - 1 ? "" : " -> "));
+				}
+				System.out.println();
+			} else {
+				System.out.println("MAP: 'I am sorry but we do not have that location here.'\n");
+			}
 		}
 	}
 	

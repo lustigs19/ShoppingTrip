@@ -14,7 +14,9 @@ public class Mall extends Location {
 	public static final Mall DEFAULT_MALL = new Mall("Marj Ma-Mall") {{
 		Area entrance = new Area("Entrance", true),
 				hallway = new Area("Hallway", false),
-				foodCourt = new Area("Food Court", false);
+				foodCourt = new Area("Food Court", false),
+				hall2 = new Area("Hallway 2", false);
+				
 		
 		entrance.addHotspot(new Store("MEMES", new HashMap<Item, Float>() {
 			private static final long serialVersionUID = 1L;
@@ -44,8 +46,9 @@ public class Mall extends Location {
 		 * the first parameter is the area added
 		 * the latter parameters are connected areas
 		 */
-		addArea(entrance, hallway);
-		addArea(hallway, entrance, foodCourt);
+		addArea(entrance, hall2, hallway);
+		addArea(hall2, entrance, hallway);
+		addArea(hallway, entrance, foodCourt, hall2);
 		addArea(foodCourt, hallway);
 	}};
 
@@ -84,5 +87,30 @@ public class Mall extends Location {
 	
 	public ArrayList<Area> getAreas() {
 		return areas;
+	}
+	
+	/** find location in mall with name n
+	 * @param n name of location that you are trying to find
+	 */
+	public Location getLocation(String n) {
+		n = n.toLowerCase();
+		
+		if (this.getName().toLowerCase().equals(n)) {
+			return this;
+		}
+		
+		for (Area a : areas) {
+			if (a.getName().toLowerCase().equals(n)) {
+				return a;
+			}
+			
+			for (Location h : a.getHotspots()) {
+				if (h.getName().toLowerCase().equals(n))
+					return h;
+			}
+		}
+		
+		return null;
+		
 	}
 }

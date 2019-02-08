@@ -13,4 +13,15 @@ public abstract class Location {
 	public String getName() {
 		return name;
 	}
+	
+	@Override
+	public boolean equals (Object obj) {
+		if (this == obj) return true;
+		
+		if (obj instanceof Location) {
+			return ((Location) obj).getName().equals(name);
+		}
+		
+		return false;
+	}
 }

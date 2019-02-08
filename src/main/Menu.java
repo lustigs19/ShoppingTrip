@@ -38,7 +38,7 @@ public class Menu {
 			for (int i = 0; i < items.size(); i++) {
 				displayMenuItem(i);
 			}
-			String input = sc.next();
+			String input = sc.nextLine();
 			System.out.println();
 			try {
 				choice = Integer.valueOf(input);
