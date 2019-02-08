@@ -14,8 +14,7 @@ public class Mall extends Location {
 	public static final Mall DEFAULT_MALL = new Mall("Marj Ma-Mall") {{
 		Area entrance = new Area("Entrance", true),
 				hallway = new Area("Hallway", false),
-				foodCourt = new Area("Food Court", false),
-				hall2 = new Area("Hallway 2", false);
+				foodCourt = new Area("Food Court", false);
 				
 		
 		entrance.addHotspot(new Store("MEMES", new HashMap<Item, Float>() {
@@ -25,7 +24,7 @@ public class Mall extends Location {
 				put(new Item("'a bunch of gamers'"), 17.49f);
 		}}));
 		
-		entrance.addHotspot(new Map("Entrance Map"));
+		entrance.addHotspot(new Map("Map"));
 		
 		hallway.addHotspot(new Store("The Lego Store", new HashMap<Item, Float>() {
 			private static final long serialVersionUID = 1L;
@@ -43,13 +42,9 @@ public class Mall extends Location {
 				put(new FoodItem("Chicken Salad Sandwich", "hmm... it says salad in the name. Must be healthy."), 3.99f);
 		}}));
 		
-		/* the first area added is the starting area
-		 * the first parameter is the area added
-		 * the latter parameters are connected areas
-		 */
-		addArea(entrance, hall2, hallway);
-		addArea(hall2, entrance, hallway);
-		addArea(hallway, entrance, foodCourt, hall2);
+		// the first area added is the starting area
+		addArea(entrance, hallway);
+		addArea(hallway, entrance, foodCourt);
 		addArea(foodCourt, hallway);
 	}};
 

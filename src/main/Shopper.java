@@ -129,7 +129,8 @@ public class Shopper {
 	public void visit(Map l) {
 		boolean leave = false;
 			
-		System.out.println("MAP: 'Welcome to the " + mall.getName() + " map service.'\n\nInput location name (type 'return' to return to " + currentArea.getName() + "):");
+		System.out.println("MAP: 'Welcome to the " + mall.getName() + " map service.'\n\n"
+				+ "Input location name (type 'return' to return to " + currentArea.getName() + "):");
 		String input = scanner.nextLine();
 		System.out.println();
 		if (input.equals("return")) {
