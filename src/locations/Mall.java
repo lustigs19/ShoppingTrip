@@ -25,12 +25,13 @@ public class Mall extends Location {
 				put(new Item("'a bunch of gamers'"), 17.49f);
 		}}));
 		
-		entrance.addHotspot(new Map());
+		entrance.addHotspot(new Map("Entrance Map"));
 		
 		hallway.addHotspot(new Store("The Lego Store", new HashMap<Item, Float>() {
 			private static final long serialVersionUID = 1L;
 		{
 				put(new Item("Big Ben"), 249.99f);
+				put(new FoodItem("Blue 2x2 Lego Block", "Why did I try to eat this? This hurts."), 9.99f);
 		}}));
 		
 		foodCourt.addHotspot(new Restaurant("Chick-fil-A", new HashMap<Item, Float>() {

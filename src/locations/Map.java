@@ -3,32 +3,43 @@ package locations;
 import java.util.ArrayList;
 
 public class Map extends Hotspot {
-	
-	ArrayList<Location> paths;
 
-	public Map() {
-		super("Map");
-		paths = new ArrayList<Location>();
+	public Map(String n) {
+		super(n);
 	}
 	
 	public ArrayList<Location> getShortestRoute(Mall m, Area a, Location b) {
-		// TODO and maps should be able to have their own names :(
-		return findLocation(m, a, b, new ArrayList<Location>());
+		ArrayList<ArrayList<Location>> paths = new ArrayList<ArrayList<Location>>();
+		
+		findLocation(m, a, b, new ArrayList<Location>(), paths);
+		
+		int shortestDistance = Integer.MAX_VALUE;
+		ArrayList<Location> result = null;
+		
+		for (int i = 0; i < paths.size(); i++) {
+			if (paths.get(i).size() < shortestDistance) {
+				shortestDistance = paths.get(i).size();
+				result = paths.get(i);
+			}
+		}
+		
+		return result;
 	}
 	
-	/** returns 1 possible path to a certain location from a certain area.*/
-	public ArrayList<Location> findLocation(Mall m, Area currentLoc, Location destination, ArrayList<Location> visitedLocations) {
+	/** populates paths with directions to the destination */
+	public void findLocation(Mall m, Area currentLoc, Location destination,
+			ArrayList<Location> visitedLocations, ArrayList<ArrayList<Location>> paths) {
 		
 		visitedLocations.add(currentLoc);
 		
 		if (currentLoc.equals(destination)) {
-			return visitedLocations;
+			paths.add(new ArrayList<Location>(visitedLocations));
 		}
 		
 		for (Location h : currentLoc.getHotspots()) {
 			if (h.equals(destination)) {
 				visitedLocations.add(destination);
-				return visitedLocations;
+				paths.add(new ArrayList<Location>(visitedLocations));
 			}
 		}
 		
@@ -39,15 +50,8 @@ public class Map extends Hotspot {
 			}
 		}
 		
-		if (nextLocs.size() == 0) {
-			return null;
-		}
-		
 		for (Location l : nextLocs) {
-			ArrayList<Location> result = findLocation(m, (Area) l, destination, new ArrayList<Location>(visitedLocations));
-			if (result != null) return result;
+			findLocation(m, (Area) l, destination, new ArrayList<Location>(visitedLocations), paths);
 		}
-		
-		return null;
 	}
 }

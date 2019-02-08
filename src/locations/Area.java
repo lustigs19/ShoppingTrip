@@ -17,7 +17,7 @@ public class Area extends Location {
 		hotspots.add(h);
 	}
 	
-	/** returns all the hotspots */
+	/** returns all hotspots */
 	public ArrayList<Location> getHotspots() {
 		ArrayList<Location> tempList = new ArrayList<Location>();
 		for (Hotspot h : hotspots) {

@@ -37,109 +37,122 @@ public class Shopper {
 		inventory = new ArrayList<Item>();
 	}
 	
-	public void visit(Location l) {
-		Location loc;
+	public void visit(Mall l) {
+		mall = (Mall) l;
+		System.out.println("You are entering the " + l.getName());
+		currentArea = mall.getDefaultArea();
+		printCurrentBalance();
 		
-		if (l instanceof Mall) {
-			mall = (Mall) l;
-			System.out.println("You are entering the " + l.getName());
-			currentArea = mall.getDefaultArea();
+		// loop of areas. Stores are visited inside the loop of a specific area (not their own visit)
+		while (!finished) {
+			visit(currentArea);
+		}
+		System.out.printf("Final balance: $%.2f\n", balance);
+	}
+			
+	public void visit(Area l) {
+		Location loc;
+		Menu menu = new Menu("You are in the area '" + currentArea.getName() + "'.\n" +
+					"What would you like to do?", 				// title
+				"Visit hotspots (ex: stores)",					// 1
+				"Visit other areas",							// 2
+				"Check purchase history",						// 3
+				"Check current balance");						// 4
+		if (((Area) l).isEntrance()) menu.addItem("Exit mall"); // 5
+		switch(menu.displayAndChoose()) {
+		
+		default:
+			break;
+		case 1:
+			menu = new LocationMenu("Choose a hotspot:", currentArea.getHotspots());
+			break;
+		case 2:
+			menu = new LocationMenu("Choose an area:", mall.getConnectedAreas(currentArea));
+			break;
+		case 3:
+			printPurchaseHistory();
+			break;
+		case 4:
 			printCurrentBalance();
-			
-			// loop of areas. Stores are visited inside the loop of a specific area (not their own visit)
-			while (!finished) {
-				visit(currentArea);
-			}
-			System.out.printf("Final balance: $%.2f\n", balance);
-			
-		} else if (l instanceof Area && currentArea != null) {
-			Menu menu = new Menu("You are in the area '" + currentArea.getName() + "'.\n"
-						+ "What would you like to do?", // title
-						"Visit hotspots (ex: stores)",					// 1
-						"Visit other areas",							// 2
-						"Check purchase history",						// 3
-						"Check current balance");						// 4
-			if (currentArea.isEntrance()) menu.addItem("Exit mall"); 	// 5
-			switch(menu.displayAndChoose()) {
-			
-			default:
-				break;
-			case 1:
-				menu = new LocationMenu("Choose a hotspot:", currentArea.getHotspots());
-				break;
-			case 2:
-				menu = new LocationMenu("Choose an area:", mall.getConnectedAreas(currentArea));
-				break;
-			case 3:
-				printPurchaseHistory();
-				break;
-			case 4:
-				printCurrentBalance();
-				break;
-			case 5:
-				finished = true;
-				break;
-			}
-			
-			// if you have chosen options 1 or 2
-			if (menu instanceof LocationMenu && currentArea != null) {
-				loc = ((LocationMenu) menu).getLocation(menu.displayAndChoose());
-				if (loc != null) {
-					if (loc instanceof Area) {
-						currentArea = (Area) loc;
-					} else {
-						visit(loc);
-					}
+			break;
+		case 5:
+			finished = true;
+			break;
+		}
+		
+		// if you have chosen options 1 or 2
+		if (menu instanceof LocationMenu && currentArea != null) {
+			loc = ((LocationMenu) menu).getLocation(menu.displayAndChoose());
+			if (loc != null) {
+				if (loc instanceof Area) {
+					currentArea = (Area) loc;
+				} else if (loc instanceof Store) {
+					visit((Store)loc);
+				} else if (loc instanceof Map) {
+					visit((Map) loc);
 				}
 			}
-		} else if (l instanceof Store) {
-			ItemMenu menu = new ItemMenu("You are in " + l.getName() + ".\nWhat would you like to purchase?", ((Store) l).getItemMap());
-			Purchase itemChoice = menu.getChoice(menu.displayAndChoose());
-			
-			if (itemChoice != null) {
-				Item i = itemChoice.getItem();
-				if (balance >= itemChoice.getCost()) {
-					balance -= itemChoice.getCost();
-					System.out.printf("You spent $%.2f on a" +
-							(VOWELS.contains(Character.isAlphabetic(i.getName().charAt(0)) ? // checking for "an" or "a"
-							Character.toLowerCase(i.getName().charAt(0)) :
-							Character.toLowerCase(i.getName().charAt(1))) ? "n" : "") +
-							" " + i.getName() + ".\n" +
-							"You have $%.2f remaining.\n", itemChoice.getCost(), balance);
-					
-					if (i instanceof FoodItem) {
-						System.out.println("\n***" + name + ": " + ((FoodItem) i).getText() + "***\n");
-					} else {
-						inventory.add(i);
-					}
-					purchaseHistory.add(itemChoice);
-				} else {
-					System.out.println("You do not have enough money to buy this.\n"
-							+ "Go to an ATM and receive more money, \n"
-							+ "or return to the entrance to finish your trip.");
-				}
-				// revisit the store. Only return to area if 'return' is chosen from the menu.
-				visit(l);
-			}
-		} else if (l instanceof Map) {
-			System.out.println("MAP: 'Welcome to the " + mall.getName() + " map service.'\nInput location name:");
-			String input = scanner.nextLine();
-			System.out.println();
-			if (mall.getLocation(input) != null) {
+		}
+	}
+
+	public void visit(Store l) {
+		ItemMenu menu = new ItemMenu("You are in " + l.getName() + ".\nWhat would you like to purchase?", ((Store) l).getItemMap());
+		Purchase itemChoice = menu.getChoice(menu.displayAndChoose());
+		
+		if (itemChoice != null) {
+			Item i = itemChoice.getItem();
+			if (balance >= itemChoice.getCost()) {
+				balance -= itemChoice.getCost();
+				System.out.printf("You spent $%.2f on a" +
+						(VOWELS.contains(Character.isAlphabetic(i.getName().charAt(0)) ? // checking for "an" or "a"
+						Character.toLowerCase(i.getName().charAt(0)) :
+						Character.toLowerCase(i.getName().charAt(1))) ? "n" : "") +
+						" " + i.getName() + ".\n" +
+						"You have $%.2f remaining.\n", itemChoice.getCost(), balance);
 				
-				if (mall.getLocation(input).equals(mall) || mall.getLocation(input).equals(currentArea) || mall.getLocation(input) instanceof Map) {
-					System.out.println("You are currently in this location.");
+				if (i instanceof FoodItem) {
+					System.out.println("\n***" + name + ": " + ((FoodItem) i).getText() + "***\n");
+				} else {
+					inventory.add(i);
 				}
+				purchaseHistory.add(itemChoice);
+			} else {
+				System.out.println("You do not have enough money to buy this.\n"
+						+ "Go to an ATM and receive more money, \n"
+						+ "or return to the entrance to finish your trip.");
+			}
+			// revisit the store. Only return to area if 'return' is chosen from the menu.
+			visit(l);
+		}
+	}
+	
+	public void visit(Map l) {
+		boolean leave = false;
+			
+		System.out.println("MAP: 'Welcome to the " + mall.getName() + " map service.'\n\nInput location name (type 'return' to return to " + currentArea.getName() + "):");
+		String input = scanner.nextLine();
+		System.out.println();
+		if (input.equals("return")) {
+			leave = true;
+		} else if (mall.getLocation(input) != null) {
+			if (mall.getLocation(input).equals(mall) || mall.getLocation(input).equals(currentArea) || mall.getLocation(input) instanceof Map) {
+				System.out.println("You are currently in this location.");
+			} else {
 				
 				System.out.println("Directions:");
 				ArrayList<Location> directions = ((Map) l).getShortestRoute(mall, currentArea, mall.getLocation(input));
 				for (int i = 0; i < directions.size(); i++) {
 					System.out.print(directions.get(i).getName() + (i == directions.size() - 1 ? "" : " -> "));
 				}
-				System.out.println();
-			} else {
-				System.out.println("MAP: 'I am sorry but we do not have that location here.'\n");
 			}
+			
+			System.out.print("\n\n");
+		} else {
+			System.out.println("MAP: 'I am sorry but we do not have that location here.'\n");
+		}
+		
+		if (!leave) {
+			visit(l);
 		}
 	}
 	
