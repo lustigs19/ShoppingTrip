@@ -68,7 +68,7 @@ public class Mall extends Location {
 	
 	/** returns the starting area for the shopping trip to the mall. */
 	public Area getDefaultArea() {
-		return areas.get(0);
+		return (areas.size() > 0 ? areas.get(0) : null);
 	}
 	
 	public ArrayList<Location> getConnectedAreas(Area a) {

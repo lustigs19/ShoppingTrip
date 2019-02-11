@@ -23,7 +23,7 @@ public class Shopper {
 	public static final int HISTORY_COLUMN2_WIDTH = 8;
 	public static final String HISTORY_TITLE = "*** PURCHASE HISTORY ***";
 	
-	static final HashSet<Character> VOWELS = new HashSet<Character>(Arrays.asList('a', 'e', 'i', 'o', 'u'));
+	static final HashSet<Character> AN_CHARS = new HashSet<Character>(Arrays.asList('a', 'e', 'i', 'o', 'u', '8'));
 	Area currentArea;
 	boolean finished;
 	
@@ -43,6 +43,8 @@ public class Shopper {
 		currentArea = mall.getDefaultArea();
 		printCurrentBalance();
 		
+		if (currentArea == null) finished = true;
+		
 		// loop of areas. Stores are visited inside the loop of a specific area (not their own visit)
 		while (!finished) {
 			visit(currentArea);
@@ -53,7 +55,7 @@ public class Shopper {
 	public void visit(Area l) {
 		Location loc;
 		Menu menu = new Menu("You are in the area '" + currentArea.getName() + "'.\n" +
-					"What would you like to do?", 				// title
+				"What would you like to do?", 				// title
 				"Visit hotspots (ex: stores)",					// 1
 				"Visit other areas",							// 2
 				"Check purchase history",						// 3
@@ -104,12 +106,12 @@ public class Shopper {
 			if (balance >= itemChoice.getCost()) {
 				balance -= itemChoice.getCost();
 				System.out.printf("You spent $%.2f on a" +
-						(VOWELS.contains(Character.isAlphabetic(i.getName().charAt(0)) ? // checking for "an" or "a"
+						(AN_CHARS.contains(Character.isAlphabetic(i.getName().charAt(0)) || 
+						i.getName().charAt(0) == '8' ? // checking for "an" or "a"
 						Character.toLowerCase(i.getName().charAt(0)) :
 						Character.toLowerCase(i.getName().charAt(1))) ? "n" : "") +
 						" " + i.getName() + ".\n" +
 						"You have $%.2f remaining.\n", itemChoice.getCost(), balance);
-						// TODO 8888888888888888 an 8 an 8
 				if (i instanceof FoodItem) {
 					System.out.println("\n***" + name + ": " + ((FoodItem) i).getText() + "***\n");
 				} else {

@@ -1,0 +1,93 @@
+{
+  "name":"Natick Mall",
+  "areas":[
+    {
+      "name":"Entrance",
+      "connections":["Hallway"],
+      "entrance":true,
+      "hotspots":[
+        {
+          "name":"MEMES",
+          "type":"store",
+          "items":[
+            {
+              "name":"'RIPRIPRIP'",
+              "food":false,
+              "cost":49.99
+            },
+            {
+              "name":"'a bunch of gamers'",
+              "food":false,
+              "cost":17.49
+            }
+          ]
+        },
+        {
+          "name":"Map",
+          "type":"map"
+        }
+      ]
+    },
+    {
+      "name":"Hallway",
+      "connections":["Entrance", "Food Court"],
+      "entrance":false,
+      "hotspots":[
+        {
+          "name":"The Lego Store",
+          "type":"store",
+          "items":[
+            {
+              "name":"Big Ben",
+              "food":false,
+              "cost":249.99
+            },
+            {
+              "name":"Blue 2x2 Lego Block",
+              "food":true,
+              "text":"Why did I try to eat this? This hurts.",
+              "cost":9.99
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name":"Food Court",
+      "connections":["Hallway"],
+      "entrance":false,
+      "hotspots":[
+        {
+          "name":"Chick-fil-A",
+          "type":"store",
+          "items":[
+            {
+              "name":"Chicken Sandwich",
+              "food":true,
+              "text":"mmm... tastes so good...",
+              "cost":3.05
+            },
+            {
+              "name":"Deluxe Chicken Sandwich",
+              "food":true,
+              "text":"omg... so much better than the regular...",
+              "cost":3.65
+            },
+            {
+              "name":"8-pc Nuggets",
+              "food":true,
+              "text":"mmm... I sure do love me some chicken nuggets",
+              "cost":3.05
+            },
+            {
+              "name":"Chicken Salad Sandwich",
+              "food":true,
+              "text":"hmm... it says salad in the name. Must be healthy.",
+              "cost":3.99
+            },
+          ]
+        }
+      ]
+    }
+  ]
+}
