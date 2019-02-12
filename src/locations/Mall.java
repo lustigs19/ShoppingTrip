@@ -58,11 +58,13 @@ public class Mall extends Location {
 	public void addArea(Area a, Area... connectedAreas) {
 		areas.add(a);
 		for (Area cArea : connectedAreas) {
-			boolean exists = false;
-			for (Connection connection : connections) {
-				if (connection.equals(new Connection(a, cArea))) exists = true;
+			if (cArea != null) {
+				boolean exists = false;
+				for (Connection connection : connections) {
+					if (connection.equals(new Connection(a, cArea))) exists = true;
+				}
+				if (!exists) connections.add(new Connection(a, cArea));
 			}
-			if (!exists) connections.add(new Connection(a, cArea));
 		}
 	}
 	

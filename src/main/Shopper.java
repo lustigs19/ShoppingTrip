@@ -43,7 +43,7 @@ public class Shopper {
 		currentArea = mall.getDefaultArea();
 		printCurrentBalance();
 		
-		if (currentArea == null) finished = true;
+		if (currentArea == null || mall == null) finished = true;
 		
 		// loop of areas. Stores are visited inside the loop of a specific area (not their own visit)
 		while (!finished) {
@@ -120,9 +120,9 @@ public class Shopper {
 				purchaseHistory.add(itemChoice);
 			} else {
 				System.out.println("You do not have enough money to buy this.\n"
-						+ "Go to an ATM and receive more money, \n"
-						+ "or return to the entrance to finish your trip.");
+						+ "return to the entrance to finish your trip, or continue to look around.");
 			}
+			
 			// revisit the store. Only return to area if 'return' is chosen from the menu.
 			visit(l);
 		}

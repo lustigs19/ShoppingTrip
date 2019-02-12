@@ -14,7 +14,7 @@ public class Area extends Location {
 	}
 	
 	public void addHotspot(Hotspot h) {
-		hotspots.add(h);
+		if (h != null) hotspots.add(h);
 	}
 	
 	/** returns all hotspots */
