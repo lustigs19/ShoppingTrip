@@ -24,40 +24,52 @@ public class STMain {
 		Scanner scanner = new Scanner(System.in);
 		String name = scanner.next();
 		
-		Float bal = null;
-		do {
-			System.out.println("Starting balance?");
-			String balance = scanner.next();
-			
-			try {
-				bal = Float.parseFloat(balance);
-				
-				if (bal <= 0) bal = null;
-			} catch (NumberFormatException e) {
-				
-			}
-		} while (bal == null);
-		
-		Mall mall;
+		boolean done = false;
 		
 		do {
-			System.out.println("File name to read? Type 'default' for default mall");
-			String fileName = scanner.next();
-			if (fileName.equals("default")) {
-				mall = Mall.DEFAULT_MALL;
-			} else {
+			Float bal = null;
+			do {
+				System.out.println("Starting balance?");
+				String balance = scanner.next();
+				
 				try {
-					mall = parseJSON(fileName + ".json");
-				} catch (Exception e) {
-					System.out.println("\nCould not find file.");
-					mall = null;
+					bal = Float.parseFloat(balance);
+					
+					if (bal <= 0) bal = null;
+				} catch (NumberFormatException e) {}
+			} while (bal == null);
+			
+			Mall mall;
+			
+			do {
+				System.out.println("File name to read? Type 'default' for default mall");
+				String fileName = scanner.next();
+				if (fileName.toLowerCase().equals("default")) {
+					mall = Mall.DEFAULT_MALL;
+				} else {
+					try {
+						mall = parseJSON(fileName + ".json");
+					} catch (Exception e) {
+						System.out.println("\nCould not find file.");
+						mall = null;
+					}
 				}
+			} while (mall == null);
+			
+			Shopper shopper = new Shopper(name, bal);
+			
+			shopper.visit(mall);
+			
+			Menu menu = new Menu("Would you like to visit a mall again?", "Yes", "No");
+			switch(menu.displayAndChoose()) {
+			case 1:
+				break;
+			default:
+			case 2:
+				done = true;
+				break;
 			}
-		} while (mall == null);
-		
-		Shopper shopper = new Shopper(name, bal);
-		
-		shopper.visit(mall);
+		} while (!done);
 		scanner.close();
 	}
 	
