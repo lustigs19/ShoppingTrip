@@ -33,7 +33,7 @@ public class Mall extends Location {
 				put(new FoodItem("Blue 2x2 Lego Block", "Why did I try to eat this? This hurts."), 9.99f);
 		}}));
 		
-		foodCourt.addHotspot(new Restaurant("Chick-fil-A", new HashMap<Item, Float>() {
+		foodCourt.addHotspot(new Store("Chick-fil-A", new HashMap<Item, Float>() {
 			private static final long serialVersionUID = 1L;
 		{
 				put(new FoodItem("Chicken Sandwich", "mmm... tastes so good..."), 3.05f);

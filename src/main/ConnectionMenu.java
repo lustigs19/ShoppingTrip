@@ -8,9 +8,11 @@ public class ConnectionMenu extends Menu {
 	
 	public int[] chooseTwo() {
 		int i1 = displayAndChoose();
-		items.remove(i1);
+		String s1 = items.remove(i1 - 1);
 		int i2 = displayAndChoose();
 		if (i2 >= i1) i2++;
+		
+		items.add(i1 - 1, s1);
 		
 		return new int[] {i1 - 1, i2 - 1};
 	}
