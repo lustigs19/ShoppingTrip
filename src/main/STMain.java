@@ -51,6 +51,7 @@ public class STMain {
 						mall = parseJSON(fileName + ".json");
 					} catch (Exception e) {
 						System.out.println("\nCould not find file.");
+						System.out.println(e.toString() + "\n");
 						mall = null;
 					}
 				}
@@ -75,7 +76,7 @@ public class STMain {
 	
 	static Mall parseJSON(String fileName) throws FileNotFoundException, IOException, ParseException {
 		// finds the file to parse and makes a JSONObject out of it
-		Object parsedObject = new JSONParser().parse(new FileReader(fileName));
+		Object parsedObject = new JSONParser().parse(new FileReader("malls/" + fileName));
 		JSONObject jo = (JSONObject) parsedObject;
 		
 		// creates the mall object
@@ -87,7 +88,7 @@ public class STMain {
 		
 		// creates each area in mAreas
 		for (int i = 0; i < mAreas.length; i++) {
-			JSONObject jArea = (JSONObject)jAreas.get(i);
+			JSONObject jArea = (JSONObject) jAreas.get(i);
 			mAreas[i] = new Area((String) jArea.get("name"), (Boolean) jArea.get("entrance"));
 		}
 		

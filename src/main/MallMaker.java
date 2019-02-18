@@ -45,8 +45,8 @@ public class MallMaker {
 		
 		done = false;
 		
-		System.out.println("Choose connections between areas:");
 		if (areas.size() > 1) {
+			System.out.println("Choose connections between areas:");
 			ConnectionMenu areaMenu = new ConnectionMenu("Areas:", areas.toArray(new String[areas.size()]));
 			// add connections between areas
 			
@@ -75,11 +75,32 @@ public class MallMaker {
 			} while (!done);
 		}
 		
+		// deletes duplicate areas
+		for (int i = areas.size() - 1; i >= 0; i--) {
+			ArrayList<String> tempList = new ArrayList<String>(areas);
+			tempList.remove(i);
+			
+			if (tempList.contains(areas.get(i))) areas.remove(i);
+		}
 		
+		// deletes areas without connections
+		if (areas.size() > 1) {
+			for (int i = areas.size() - 1; i >= 0; i--) {
+				boolean hasConnections = false;
+				for (String[] mCon : mCons) {
+					if (mCon[0].equals(areas.get(i)) || mCon[1].equals(areas.get(i))) hasConnections = true;
+				}
+				
+				if (!hasConnections) {
+					areas.remove(i);
+				}
+			}
+		}
 		
-		// TODO delete areas without connections
-		// TODO delete connections that do not exist before the checking
-		// TODO delete duplicate areas
+		// deletes connections with areas that do not exist anymore
+		for (int i = mCons.size() - 1; i >= 0; i--) {
+			if (!areas.contains(mCons.get(i)[0]) || !areas.contains(mCons.get(i)[1])) mCons.remove(i);
+		}
 		
 		JSONArray jAreas = new JSONArray();
 		JSONArray hotspots = new JSONArray();
@@ -145,7 +166,7 @@ public class MallMaker {
 						item.put("cost", iCost);
 						items.add(item);
 						
-						
+						anotherMenu.setTitle("Would you like to add another item?");
 						switch(anotherMenu.displayAndChoose()) {
 						case 1:
 							break;
@@ -168,6 +189,7 @@ public class MallMaker {
 				
 				hotspots.add(hotspot);
 				
+				anotherMenu.setTitle("Would you add another hotspot to area " + a + "?");
 				switch(anotherMenu.displayAndChoose()) {
 				case 1:
 					break;
@@ -196,6 +218,7 @@ public class MallMaker {
 				}
 			}
 			jArea.put("hotspots", hotspots);
+			jArea.put("connections", cons);
 			
 			jAreas.add(jArea);
 		}
@@ -206,11 +229,11 @@ public class MallMaker {
 		String fileName = sc.nextLine();
 		fileName.replaceAll(" ", "");
 		
-		File file = new File(fileName + ".json");
+		File file = new File("malls/" + fileName + ".json");
 		file.createNewFile();
 		FileWriter writer = new FileWriter(file);
 		writer.write(jMall.toJSONString());
-		System.out.println("Successfully Copied JSON Object to File " + fileName + ".json");
+		System.out.println("Successfully Copied JSON Object to File malls/" + fileName + ".json");
 		System.out.println("\nJSON Object: " + jMall);
 		
 		writer.close();

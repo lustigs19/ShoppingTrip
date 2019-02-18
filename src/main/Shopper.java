@@ -105,11 +105,19 @@ public class Shopper {
 			Item i = itemChoice.getItem();
 			if (balance >= itemChoice.getCost()) {
 				balance -= itemChoice.getCost();
+				
+				boolean an;
+				if (AN_CHARS.contains(i.getName().charAt(0)) ||
+						(i.getName().length() > 1 &&
+						!Character.isAlphabetic(i.getName().charAt(0)) &&
+						AN_CHARS.contains(i.getName().charAt(1)))) {
+					an = true;
+				} else {
+					an = false;
+				}
+				
 				System.out.printf("You spent $%.2f on a" +
-						(AN_CHARS.contains(Character.isAlphabetic(i.getName().charAt(0)) || 
-						i.getName().charAt(0) == '8' ? // checking for "an" or "a"
-						Character.toLowerCase(i.getName().charAt(0)) :
-						Character.toLowerCase(i.getName().charAt(1))) ? "n" : "") +
+						(an ? "n" : "") +
 						" " + i.getName() + ".\n" +
 						"You have $%.2f remaining.\n", itemChoice.getCost(), balance);
 				if (i instanceof FoodItem) {
